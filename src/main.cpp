@@ -10,7 +10,7 @@ main(int, char **)
   os_init(false);
   gfx_init();
 
-  DB_pg_connect("host=172.17.0.2 port=5432 dbname=dev user=postgres "
+  DB_pg_connect("host=172.17.0.2 port=5432 dbname=test user=postgres "
                 "password=root connect_timeout=10");
 
   if (!DB_pg_connect_is_valid()) {
@@ -36,7 +36,7 @@ main(int, char **)
       |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
 
   io.Fonts->AddFontFromFileTTF(
-      "/usr/share/fonts/adobe-source-code-pro-fonts/SourceCodePro-Medium.otf",
+      "../assets/fonts/NotoSansCJK-Regular.ttc",
       18.f, nullptr, ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
   ImGui::StyleColorsLight();

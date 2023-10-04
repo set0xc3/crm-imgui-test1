@@ -27,6 +27,12 @@ set(IMGUI_SRC_FILES
   vendor/imgui/backends/imgui_impl_opengl2.cpp
 )
 
+if (DEFINED ENV{PG_INCLUDE_DIR})
+    include_directories($ENV{PG_INCLUDE_DIR})
+else()
+    include_directories(/usr/include/postgresql)
+endif()
+
 add_executable(${TARGET} ${SRC_FILES} ${IMGUI_SRC_FILES})
 
 target_compile_options(${TARGET} PRIVATE 
