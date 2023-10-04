@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 add_subdirectory(vendor/cbased)
 
-set(TARGET skat_matrix.bin)
+set(TARGET crm)
 project(${TARGET} LANGUAGES CXX)
 
 set(TARGET_ARCHITECTURE "x64")
@@ -43,12 +43,14 @@ target_compile_options(${TARGET} PRIVATE
   -Wno-incompatible-library-redeclaration
 )
 
+find_package(SDL2 REQUIRED)
+
 target_include_directories(${TARGET} PRIVATE 
   src 
   vendor/cbased/cbased/src
   vendor/imgui
   vendor/imgui/backends
-  /usr/include/SDL2
+  ${SDL2_INCLUDE_DIRS}
 )
 
 target_link_libraries(${TARGET} PRIVATE
