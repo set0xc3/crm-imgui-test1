@@ -20,16 +20,6 @@ app_init(void)
   os_init(false);
   gfx_init();
 
-  // DB_client_create(&client_info);
-
-  PGresult *pg_result = DB_pg_exec("SELECT * FROM clients");
-  if (!pg_result) {
-    DB_pg_finish();
-  }
-
-  u32 pg_result_rows = PQntuples(pg_result);
-  u32 pg_result_cols = PQnfields(pg_result);
-
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
@@ -39,8 +29,8 @@ app_init(void)
   io.ConfigFlags
       |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
 
-  io.Fonts->AddFontFromFileTTF("../assets/fonts/SourceCodePro-Medium.otf",
-                               18.0f, nullptr,
+  io.Fonts->AddFontFromFileTTF("assets/fonts/SourceCodePro-Medium.otf", 18.0f,
+                               nullptr,
                                ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
   ImGui::StyleColorsLight();

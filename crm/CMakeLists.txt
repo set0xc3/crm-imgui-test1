@@ -61,3 +61,22 @@ add_executable(${TARGET} ${SRC_FILES} ${IMGUI_SRC_FILES})
 add_library(${TARGET}-static STATIC ${SRC_FILES} ${IMGUI_SRC_FILES})
 
 add_subdirectory(tests)
+
+add_custom_target(run-${TARGET} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/crm)
+
+# Asset files
+set(ASSETS_SRC "${CMAKE_SOURCE_DIR}/assets")
+set(ASSETS_DST "$<TARGET_FILE_DIR:${TARGET}>/assets")
+
+if(WIN32)
+    set(ASSETS_CMD copy_directory)
+    set(ASSETS_MSG "Copy assets")
+else()
+    set(ASSETS_CMD create_symlink)
+    set(ASSETS_MSG "Link assets")
+endif()
+
+add_custom_command(TARGET ${TARGET} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "${ASSETS_MSG}: ${ASSETS_SRC} to ${ASSETS_DST}"
+    COMMAND ${CMAKE_COMMAND} -E ${ASSETS_CMD} "${ASSETS_SRC}" "${ASSETS_DST}"
+)
