@@ -31,9 +31,9 @@ else()
     include_directories(/usr/include/postgresql)
 endif()
 
-add_executable(${TARGET} ${SRC_FILES} ${IMGUI_SRC_FILES})
+link_libraries(cbased)
 
-target_compile_options(${TARGET} PRIVATE 
+add_compile_options(
   -g 
   -O0
   -Wall 
@@ -49,7 +49,7 @@ target_compile_options(${TARGET} PRIVATE
 
 find_package(SDL2 REQUIRED)
 
-target_include_directories(${TARGET} PRIVATE 
+include_directories( 
   crm/src
   ${CMAKE_SOURCE_DIR}/vendor/cbased/cbased/src
   ${CMAKE_SOURCE_DIR}/vendor/imgui
@@ -57,10 +57,7 @@ target_include_directories(${TARGET} PRIVATE
   ${SDL2_INCLUDE_DIRS}
 )
 
-link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-
-target_link_libraries(${TARGET} PRIVATE
-  cbased
-)
+add_executable(${TARGET} ${SRC_FILES} ${IMGUI_SRC_FILES})
+add_library(${TARGET}-static STATIC ${SRC_FILES} ${IMGUI_SRC_FILES})
 
 add_subdirectory(tests)

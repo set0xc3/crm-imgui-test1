@@ -20,15 +20,6 @@ app_init(void)
   os_init(false);
   gfx_init();
 
-  DB_Client client_info = {
-    .uuid    = uuid_gen(),
-    .id      = 0,
-    .name    = "Александр",
-    .phone   = "+00000000000",
-    .address = "None",
-    .email   = "alexander@gmail.com",
-    .date    = "2023-04-10",
-  };
   // DB_client_create(&client_info);
 
   PGresult *pg_result = DB_pg_exec("SELECT * FROM clients");

@@ -12,7 +12,6 @@ typedef struct DB_ClientNode DB_ClientNode;
 typedef struct DB_ClientList DB_ClientList;
 
 struct DB_Client {
-  Uuid        uuid;
   u32         id;
   const char *name;
   const char *phone;
@@ -31,7 +30,7 @@ struct DB_ClientList {
   u32      count;
 };
 
-void          DB_client_create(const DB_Client *client);
-void          DB_client_destroy(const DB_Client *client);
-DB_ClientList DB_client_list(void);
-u32           DB_client_count(void);
+void           DB_client_create(const DB_Client *client);
+void           DB_client_destroy(const DB_Client *client);
+DB_ClientList *DB_client_list(void);
+u32            DB_client_count(void);
