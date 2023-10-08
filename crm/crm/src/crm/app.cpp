@@ -1,8 +1,11 @@
 #include "app.h"
 
-#include "cbased/database/postgresql.h"
+#include "cbased/db/postgresql.h"
 #include "cbased/gfx/gfx.h"
 #include "cbased/os/os.h"
+
+#include "db/client.h"
+#include "db/server.h"
 
 #include <imgui.h>
 #include <imgui_impl_opengl2.h>
@@ -17,12 +20,16 @@ app_init(void)
   os_init(false);
   gfx_init();
 
-  DB_pg_connect("host=172.17.0.2 port=5432 dbname=test user=postgres "
-                "password=root connect_timeout=10");
-
-  if (!DB_pg_connect_is_valid()) {
-    DB_pg_finish();
-  }
+  DB_Client client_info = {
+    .uuid    = uuid_gen(),
+    .id      = 0,
+    .name    = "Александр",
+    .phone   = "+00000000000",
+    .address = "None",
+    .email   = "alexander@gmail.com",
+    .date    = "2023-04-10",
+  };
+  // DB_client_create(&client_info);
 
   PGresult *pg_result = DB_pg_exec("SELECT * FROM clients");
   if (!pg_result) {
@@ -41,8 +48,8 @@ app_init(void)
   io.ConfigFlags
       |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
 
-  io.Fonts->AddFontFromFileTTF("../assets/fonts/NotoSansCJK-Regular.ttc", 18.f,
-                               nullptr,
+  io.Fonts->AddFontFromFileTTF("../assets/fonts/SourceCodePro-Medium.otf",
+                               18.0f, nullptr,
                                ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 
   ImGui::StyleColorsLight();

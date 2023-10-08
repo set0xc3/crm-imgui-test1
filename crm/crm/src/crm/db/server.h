@@ -7,6 +7,5 @@ typedef struct DB_Server DB_Server;
 struct DB_Server {
 };
 
-void DB_server_add(void);
-void DB_server_remove(void);
-void DB_server_get(void);
+b32  DB_server_connect(const char *path);
+void DB_server_disconnect(void);
