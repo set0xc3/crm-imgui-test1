@@ -39,7 +39,7 @@ app_init(void)
                                os_window_root_get()->sdl.gl_ctx);
   ImGui_ImplOpenGL2_Init();
 
-  ImGui::GetIO().FontGlobalScale = 2.0; // HACK
+  ImGui::GetIO().FontGlobalScale = 1.0; // HACK
 }
 
 void
