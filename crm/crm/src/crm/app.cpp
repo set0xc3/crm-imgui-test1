@@ -78,6 +78,8 @@ app_run(void)
                                              : viewport->Size);
 
       if (ImGui::Begin("RootWindow", NULL, flags)) {
+
+        // TabBars
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)) {
           if (ImGui::BeginTabItem("Ремонты")) {
@@ -90,6 +92,15 @@ app_run(void)
           }
           if (ImGui::BeginTabItem("Клиенты")) {
             ImGui::Text("Клиенты");
+
+            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth()
+                                           - ImGui::GetStyle().ItemSpacing.x
+                                           - ImGui::GetItemRectSize().x,
+                                       ImGui::GetItemRectMax().y));
+            ImGui::BeginGroup();
+            ImGui::Button("Создать клиента");
+            ImGui::Button("Экспорт");
+            ImGui::EndGroup();
 
             static ImGuiTableFlags flags
                 = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg;
@@ -117,6 +128,34 @@ app_run(void)
             }
             ImGui::EndTable();
             ImGui::EndTabItem();
+
+            {
+              static ImVec2          combo_padding = ImVec2(20, 20);
+              static ImGuiComboFlags flags         = 0;
+              const char            *items[]       = {
+                "5", "10", "20", "50", "100",
+              };
+              static int  item_current_idx    = 0;
+              const char *combo_preview_value = items[item_current_idx];
+
+              ImGui::SetCursorPos(ImVec2(
+                  combo_padding.x,
+                  ImGui::GetWindowHeight() - ImGui::GetStyle().ItemSpacing.y
+                      - ImGui::GetFontSize() - combo_padding.y));
+              ImGui::SetNextItemWidth(60);
+              if (ImGui::BeginCombo("combo 1", combo_preview_value, flags)) {
+                for (int n = 0; n < IM_ARRAYSIZE(items); n++) {
+                  const bool is_selected = (item_current_idx == n);
+                  if (ImGui::Selectable(items[n], is_selected)) {
+                    item_current_idx = n;
+                  }
+                  if (is_selected) {
+                    ImGui::SetItemDefaultFocus();
+                  }
+                }
+                ImGui::EndCombo();
+              }
+            }
           }
           if (ImGui::BeginTabItem("Финансы")) {
             ImGui::Text("Финансы");
