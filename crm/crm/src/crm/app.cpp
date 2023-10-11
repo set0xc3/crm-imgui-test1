@@ -1,9 +1,6 @@
 #include "app.h"
 
-#include "cbased/db/postgresql.h"
-#include "cbased/gfx/gfx.h"
-#include "cbased/os/os.h"
-
+#include "crm/views/clients.h"
 #include "db/client.h"
 #include "db/server.h"
 
@@ -78,7 +75,6 @@ app_run(void)
                                              : viewport->Size);
 
       if (ImGui::Begin("RootWindow", NULL, flags)) {
-
         // TabBars
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)) {
@@ -91,71 +87,7 @@ app_run(void)
             ImGui::EndTabItem();
           }
           if (ImGui::BeginTabItem("Клиенты")) {
-            ImGui::Text("Клиенты");
-
-            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth()
-                                           - ImGui::GetStyle().ItemSpacing.x
-                                           - ImGui::GetItemRectSize().x,
-                                       ImGui::GetItemRectMax().y));
-            ImGui::BeginGroup();
-            ImGui::Button("Создать клиента");
-            ImGui::Button("Экспорт");
-            ImGui::EndGroup();
-
-            static ImGuiTableFlags flags
-                = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg;
-            static bool display_headers = false;
-
-            if (ImGui::BeginTable("table_clients", 6, flags)) {
-              ImGui::TableSetupColumn("ID");
-              ImGui::TableSetupColumn("Ф.И.О");
-              ImGui::TableSetupColumn("Телефон");
-              ImGui::TableSetupColumn("Адрес");
-              ImGui::TableSetupColumn("Эл.почта");
-              ImGui::TableSetupColumn("Дата регистрации");
-              ImGui::TableHeadersRow();
-
-#if 0
-              for (u32 row = 0; row < pg_result_rows; row++) {
-                ImGui::TableNextRow();
-                for (u32 i = 0; i < 6; i++) {
-                  ImGui::TableSetColumnIndex(i);
-                  ImGui::TextUnformatted(PQgetvalue(pg_result, row, i + 1));
-                }
-                ImGui::Button("X");
-              }
-#endif
-            }
-            ImGui::EndTable();
-            ImGui::EndTabItem();
-
-            {
-              static ImVec2          combo_padding = ImVec2(20, 20);
-              static ImGuiComboFlags flags         = 0;
-              const char            *items[]       = {
-                "5", "10", "20", "50", "100",
-              };
-              static int  item_current_idx    = 0;
-              const char *combo_preview_value = items[item_current_idx];
-
-              ImGui::SetCursorPos(ImVec2(
-                  combo_padding.x,
-                  ImGui::GetWindowHeight() - ImGui::GetStyle().ItemSpacing.y
-                      - ImGui::GetFontSize() - combo_padding.y));
-              ImGui::SetNextItemWidth(60);
-              if (ImGui::BeginCombo("combo 1", combo_preview_value, flags)) {
-                for (int n = 0; n < IM_ARRAYSIZE(items); n++) {
-                  const bool is_selected = (item_current_idx == n);
-                  if (ImGui::Selectable(items[n], is_selected)) {
-                    item_current_idx = n;
-                  }
-                  if (is_selected) {
-                    ImGui::SetItemDefaultFocus();
-                  }
-                }
-                ImGui::EndCombo();
-              }
-            }
+            clients_view_display();
           }
           if (ImGui::BeginTabItem("Финансы")) {
             ImGui::Text("Финансы");
