@@ -1,5 +1,7 @@
 #include "app.h"
 
+#include "crm/ui/imgui.h"
+#include "crm/ui/ui.h"
 #include "crm/views/clients.h"
 #include "db/client.h"
 #include "db/server.h"
@@ -8,7 +10,6 @@
 #include <imgui_impl_opengl2.h>
 #include <imgui_impl_sdl2.h>
 
-static ImVec4  clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 static App_Ctx ctx;
 
 void
@@ -16,27 +17,7 @@ app_init(void)
 {
   os_init(false);
   gfx_init();
-
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  (void)io;
-  io.ConfigFlags
-      |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-  io.ConfigFlags
-      |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
-
-  io.Fonts->AddFontFromFileTTF("assets/fonts/SourceCodePro-Medium.otf", 18.0f,
-                               nullptr,
-                               ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
-
-  ImGui::StyleColorsLight();
-
-  ImGui_ImplSDL2_InitForOpenGL(os_window_root_get()->sdl.window,
-                               os_window_root_get()->sdl.gl_ctx);
-  ImGui_ImplOpenGL2_Init();
-
-  ImGui::GetIO().FontGlobalScale = 1.0; // HACK
+  ui_init();
 }
 
 void
@@ -49,7 +30,7 @@ app_run(void)
   while (!done) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL2_ProcessEvent(&event);
+      ui_process_event(&event);
       if (event.type == SDL_QUIT)
         done = true;
       if (event.type == SDL_WINDOWEVENT
@@ -59,9 +40,7 @@ app_run(void)
         done = true;
     }
 
-    ImGui_ImplOpenGL2_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
+    ui_begin();
     {
       static bool             use_work_area = true;
       static ImGuiWindowFlags flags         = ImGuiWindowFlags_NoDecoration
@@ -87,7 +66,8 @@ app_run(void)
             ImGui::EndTabItem();
           }
           if (ImGui::BeginTabItem("Клиенты")) {
-            clients_view_display();
+            DB_ClientList *client_list = NULL;
+            clients_view_display(client_list);
           }
           if (ImGui::BeginTabItem("Финансы")) {
             ImGui::Text("Финансы");
@@ -108,15 +88,10 @@ app_run(void)
       }
       ImGui::End();
     }
-    ImGui::Render();
 
-    ImGuiIO &io = ImGui::GetIO();
-    gfx_begin(0, 0, (u32)io.DisplaySize.x, (u32)io.DisplaySize.y);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
-                 clear_color.z * clear_color.w, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
+    ui_end();
+    ui_render();
 
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     os_window_swap_buffer(os_window_root_get());
 
     os_delay(1);
@@ -128,7 +103,5 @@ app_run(void)
 void
 app_shutdown(void)
 {
-  ImGui_ImplOpenGL2_Shutdown();
-  ImGui_ImplSDL2_Shutdown();
-  ImGui::DestroyContext();
+  imgui_destroy();
 }

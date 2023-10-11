@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 void
-clients_view_display(void)
+clients_view_display(DB_ClientList *client_list)
 {
   const float TEXT_BASE_WIDTH  = ImGui::CalcTextSize("A").x;
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
