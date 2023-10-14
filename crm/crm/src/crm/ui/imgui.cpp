@@ -16,7 +16,7 @@ imgui_init(void)
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
   io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport
 
-  io.Fonts->AddFontFromFileTTF("assets/fonts/SourceCodePro-Medium.otf", 18.0f,
+  io.Fonts->AddFontFromFileTTF("assets/fonts/SourceCodePro-Medium.otf", 20.0f,
                                nullptr,
                                ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 

@@ -13,7 +13,7 @@ clients_view_display(DB_ClientList *client_list)
   static ImGuiTableFlags flags
       = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
         | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Sortable
-        | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit;
+        | ImGuiTableFlags_Resizable;
   static bool display_headers = false;
 
   const char *items[] = {
@@ -38,10 +38,11 @@ clients_view_display(DB_ClientList *client_list)
   // Always center this window when appearing
   ImVec2 center = ImGui::GetMainViewport()->GetCenter();
   ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  ImGui::SetNextWindowSize(ImVec2(400, 400));
+  ImGui::SetNextWindowSize(ImVec2(500, 400));
   if (ImGui::BeginPopupModal("Создать клиента", NULL,
                              ImGuiWindowFlags_NoDocking
-                                 | ImGuiWindowFlags_NoResize)) {
+                                 | ImGuiWindowFlags_NoResize
+                                 | ImGuiWindowFlags_NoMove)) {
     b32 is_valid = false;
 
     // Физ/Юр лицо
@@ -454,10 +455,8 @@ clients_view_display(DB_ClientList *client_list)
       ImGui::TableSetColumnIndex(2);
       ImGui::TextUnformatted("VIP");
 
-      ImGui::PushItemWidth(-ImGui::GetContentRegionAvail().x * 0.5f);
       ImGui::TableSetColumnIndex(8);
       ImGui::Button("X");
-      ImGui::PushItemWidth(-FLT_MIN); // Right-aligned
     }
   }
   ImGui::EndTable();
