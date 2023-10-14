@@ -12,15 +12,16 @@ clients_view_display(DB_ClientList *client_list)
 
   static ImGuiTableFlags flags
       = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-        | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Sortable;
+        | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Sortable
+        | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit;
   static bool display_headers = false;
 
   const char *items[] = {
     "5", "10", "20", "50", "100",
   };
-  static int  item_current_idx    = 0;
-  const char *combo_preview_value = items[item_current_idx];
-  static u32  max_client_view     = strtol(combo_preview_value, NULL, 10);
+  static int  item_current_idx = 0;
+  const char *preview_value    = items[item_current_idx];
+  static u32  max_client_view  = strtol(preview_value, NULL, 10);
 
   ImGui::Text("Клиенты");
 
@@ -31,35 +32,432 @@ clients_view_display(DB_ClientList *client_list)
 
   ImGui::BeginGroup();
   if (ImGui::Button("Создать клиента")) {
-    max_client_view++;
+    ImGui::OpenPopup("Создать клиента");
   }
+
+  // Always center this window when appearing
+  ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+  ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+  ImGui::SetNextWindowSize(ImVec2(400, 400));
+  if (ImGui::BeginPopupModal("Создать клиента", NULL,
+                             ImGuiWindowFlags_NoDocking
+                                 | ImGuiWindowFlags_NoResize)) {
+    b32 is_valid = false;
+
+    // Физ/Юр лицо
+    {
+      static const char *items[] = {
+        "Физ. лицо",
+        "Юр. лицо",
+      };
+      static u32  item_current_idx = 0;
+      const char *preview_value    = items[item_current_idx];
+
+      static Uuid uuid            = uuid_gen();
+      static char input_buf[1024] = { 0 };
+      static char title_buf[1024] = { 0 };
+      sprintf(title_buf, "##%s", uuid.value);
+
+      ImGui::Text("%s", preview_value);
+      ImGui::SameLine();
+
+      if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+        for (size_t i = 0; i < ArrayCount(items); i++) {
+          const u32 is_selected = (item_current_idx == i);
+          if (ImGui::Selectable(items[i], is_selected)) {
+            item_current_idx = i;
+          }
+          if (is_selected) {
+            ImGui::SetItemDefaultFocus();
+          }
+        }
+        ImGui::EndCombo();
+      }
+      ImGui::Separator();
+
+      if (item_current_idx == 0) {
+        // Телефон
+        {
+          ImGui::Text("Телефон:*");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Ф.И.О
+        {
+          ImGui::Text("Ф.И.О:*");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Адрес
+        {
+          ImGui::Text("Адрес:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Эл.почта
+        {
+          ImGui::Text("Эл.почта:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Примечание
+        {
+          ImGui::Text("Примечание:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Контрагент
+        {
+          ImGui::Text("Контрагент:");
+          ImGui::SameLine();
+
+          static const char *items[] = {
+            "Не выбран",
+            "Иван Иванович",
+          };
+          static u32  item_current_idx = 0;
+          const char *preview_value    = items[item_current_idx];
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+
+          ImGui::Text("%s", preview_value);
+          ImGui::SameLine();
+
+          if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+            for (size_t i = 0; i < ArrayCount(items); i++) {
+              const u32 is_selected = (item_current_idx == i);
+              if (ImGui::Selectable(items[i], is_selected)) {
+                item_current_idx = i;
+              }
+              if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+              }
+            }
+            ImGui::EndCombo();
+          }
+        }
+        // Статус клиента(метка)
+        {
+          ImGui::Text("Статус клиента(метка):");
+          ImGui::SameLine();
+
+          static const char *items[] = {
+            "Не выбран", "-5%",      "-10%",    "-20%", "-30%",
+            "blacklist", "discount", "regular", "VIP",
+          };
+          static u32  item_current_idx = 0;
+          const char *preview_value    = items[item_current_idx];
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+
+          ImGui::Text("%s", preview_value);
+          ImGui::SameLine();
+
+          if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+            for (size_t i = 0; i < ArrayCount(items); i++) {
+              const u32 is_selected = (item_current_idx == i);
+              if (ImGui::Selectable(items[i], is_selected)) {
+                item_current_idx = i;
+              }
+              if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+              }
+            }
+            ImGui::EndCombo();
+          }
+        }
+        // Рекламный канал(источник)
+        {
+          ImGui::Text("Рекламный канал(источник):");
+          ImGui::SameLine();
+
+          static const char *items[] = {
+            "Не определен",    "Интернет",           "Партнер",
+            "По рекомендации", "Постоянные клиенты", "Проходящий поток",
+            "СЦ ТРУД",
+          };
+          static u32  item_current_idx = 0;
+          const char *preview_value    = items[item_current_idx];
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+
+          ImGui::Text("%s", preview_value);
+          ImGui::SameLine();
+
+          if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+            for (size_t i = 0; i < ArrayCount(items); i++) {
+              const u32 is_selected = (item_current_idx == i);
+              if (ImGui::Selectable(items[i], is_selected)) {
+                item_current_idx = i;
+              }
+              if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+              }
+            }
+            ImGui::EndCombo();
+          }
+        }
+      } else {
+        // Название организации
+        {
+          ImGui::Text("Название организации:*");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Телефон
+        {
+          ImGui::Text("Телефон:*");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Юридический адрес
+        {
+          ImGui::Text("Юридический адрес:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Фактический адрес
+        {
+          ImGui::Text("Фактический адрес:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Эл.почта
+        {
+          ImGui::Text("Эл.почта:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Примечание
+        {
+          ImGui::Text("Примечание:");
+          ImGui::SameLine();
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+        }
+        // Контрагент
+        {
+          ImGui::Text("Контрагент:");
+          ImGui::SameLine();
+
+          static const char *items[] = {
+            "Не выбран",
+            "Иван Иванович",
+          };
+          static u32  item_current_idx = 0;
+          const char *preview_value    = items[item_current_idx];
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+
+          ImGui::Text("%s", preview_value);
+          ImGui::SameLine();
+
+          if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+            for (size_t i = 0; i < ArrayCount(items); i++) {
+              const u32 is_selected = (item_current_idx == i);
+              if (ImGui::Selectable(items[i], is_selected)) {
+                item_current_idx = i;
+              }
+              if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+              }
+            }
+            ImGui::EndCombo();
+          }
+        }
+        // Статус клиента(метка)
+        {
+          ImGui::Text("Статус клиента(метка):");
+          ImGui::SameLine();
+
+          static const char *items[] = {
+            "Не выбран", "-5%",      "-10%",    "-20%", "-30%",
+            "blacklist", "discount", "regular", "VIP",
+          };
+          static u32  item_current_idx = 0;
+          const char *preview_value    = items[item_current_idx];
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+
+          ImGui::Text("%s", preview_value);
+          ImGui::SameLine();
+
+          if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+            for (size_t i = 0; i < ArrayCount(items); i++) {
+              const u32 is_selected = (item_current_idx == i);
+              if (ImGui::Selectable(items[i], is_selected)) {
+                item_current_idx = i;
+              }
+              if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+              }
+            }
+            ImGui::EndCombo();
+          }
+        }
+        // Рекламный канал(источник)
+        {
+          ImGui::Text("Рекламный канал(источник):");
+          ImGui::SameLine();
+
+          static const char *items[] = {
+            "Не определен",    "Интернет",           "Партнер",
+            "По рекомендации", "Постоянные клиенты", "Проходящий поток",
+            "СЦ ТРУД",
+          };
+          static u32  item_current_idx = 0;
+          const char *preview_value    = items[item_current_idx];
+
+          static Uuid uuid            = uuid_gen();
+          static char input_buf[1024] = { 0 };
+          static char title_buf[1024] = { 0 };
+          sprintf(title_buf, "##%s", uuid.value);
+
+          ImGui::Text("%s", preview_value);
+          ImGui::SameLine();
+
+          if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
+            for (size_t i = 0; i < ArrayCount(items); i++) {
+              const u32 is_selected = (item_current_idx == i);
+              if (ImGui::Selectable(items[i], is_selected)) {
+                item_current_idx = i;
+              }
+              if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+              }
+            }
+            ImGui::EndCombo();
+          }
+        }
+      }
+    }
+
+    ImGui::SetCursorPos(ImVec2(ImGui::GetStyle().ItemSpacing.x,
+                               ImGui::GetWindowHeight()
+                                   - ImGui::GetStyle().ItemSpacing.y
+                                   - ImGui::GetFontSize() - 10.0f));
+    ImGui::BeginGroup();
+    if (ImGui::Button("Создать") && is_valid) {
+      max_client_view++;
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Отмена")) {
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndGroup();
+
+    ImGui::EndPopup();
+  }
+
   ImGui::SameLine();
   ImGui::Button("Экспорт");
 
   group_size = ImGui::GetItemRectSize();
   ImGui::EndGroup();
 
-  if (ImGui::BeginTable("table_clients", 7, flags,
+  if (ImGui::BeginTable("table_clients", 9, flags,
                         ImVec2(0.0f, TEXT_BASE_HEIGHT * 15), 0.0f)) {
     ImGui::TableSetupColumn("ID");
+    ImGui::TableSetupColumn(""); // Mark
+    ImGui::TableSetupColumn(""); // Tag
     ImGui::TableSetupColumn("Ф.И.О");
     ImGui::TableSetupColumn("Телефон");
     ImGui::TableSetupColumn("Адрес");
     ImGui::TableSetupColumn("Эл.почта");
     ImGui::TableSetupColumn("Дата регистрации");
+    ImGui::TableSetupColumn(""); // Close
     ImGui::TableHeadersRow();
 
-    for (u32 row = 0; row < ClampTop(strtol(combo_preview_value, NULL, 10),
-                                     max_client_view);
+    for (u32 row = 0;
+         row < ClampTop(strtol(preview_value, NULL, 10), max_client_view);
          row++) {
       ImGui::TableNextRow();
-      for (u32 i = 0; i < 6; i++) {
-        ImGui::TableSetColumnIndex(i);
-        ImGui::TextUnformatted("Test");
-      }
 
-      ImGui::TableSetColumnIndex(6);
+      ImGui::TableSetColumnIndex(0);
+      static char title_buf[1024] = { 0 };
+      sprintf(title_buf, "#%d", row);
+      ImGui::TextUnformatted(title_buf);
+
+      ImGui::TableSetColumnIndex(1);
+      ImGui::TextUnformatted("*");
+
+      ImGui::TableSetColumnIndex(2);
+      ImGui::TextUnformatted("VIP");
+
+      ImGui::PushItemWidth(-ImGui::GetContentRegionAvail().x * 0.5f);
+      ImGui::TableSetColumnIndex(8);
       ImGui::Button("X");
+      ImGui::PushItemWidth(-FLT_MIN); // Right-aligned
     }
   }
   ImGui::EndTable();
@@ -74,7 +472,7 @@ clients_view_display(DB_ClientList *client_list)
                                     - ImGui::GetStyle().ItemSpacing.y
                                     - ImGui::GetFontSize() - combo_padding.y));
     ImGui::SetNextItemWidth(60);
-    if (ImGui::BeginCombo("combo 1", combo_preview_value, flags)) {
+    if (ImGui::BeginCombo("##combo", preview_value, flags)) {
       for (int n = 0; n < IM_ARRAYSIZE(items); n++) {
         const bool is_selected = (item_current_idx == n);
         if (ImGui::Selectable(items[n], is_selected)) {

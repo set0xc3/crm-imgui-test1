@@ -57,6 +57,10 @@ app_run(void)
         // TabBars
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)) {
+          if (ImGui::BeginTabItem("Главная")) {
+            ImGui::Text("Главная");
+            ImGui::EndTabItem();
+          }
           if (ImGui::BeginTabItem("Ремонты")) {
             ImGui::Text("Ремонты");
             ImGui::EndTabItem();
