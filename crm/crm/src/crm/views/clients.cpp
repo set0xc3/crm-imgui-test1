@@ -63,7 +63,7 @@ clients_view_display(DB_ClientList *client_list)
       ImGui::SameLine();
 
       if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-        for (size_t i = 0; i < ArrayCount(items); i++) {
+        for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
           const u32 is_selected = (item_current_idx == i);
           if (ImGui::Selectable(items[i], is_selected)) {
             item_current_idx = i;
@@ -86,7 +86,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Ф.И.О
         {
@@ -97,7 +97,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Адрес
         {
@@ -108,7 +108,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Эл.почта
         {
@@ -119,7 +119,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Примечание
         {
@@ -130,7 +130,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Контрагент
         {
@@ -153,7 +153,7 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::SameLine();
 
           if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-            for (size_t i = 0; i < ArrayCount(items); i++) {
+            for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
               const u32 is_selected = (item_current_idx == i);
               if (ImGui::Selectable(items[i], is_selected)) {
                 item_current_idx = i;
@@ -186,7 +186,7 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::SameLine();
 
           if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-            for (size_t i = 0; i < ArrayCount(items); i++) {
+            for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
               const u32 is_selected = (item_current_idx == i);
               if (ImGui::Selectable(items[i], is_selected)) {
                 item_current_idx = i;
@@ -220,7 +220,7 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::SameLine();
 
           if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-            for (size_t i = 0; i < ArrayCount(items); i++) {
+            for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
               const u32 is_selected = (item_current_idx == i);
               if (ImGui::Selectable(items[i], is_selected)) {
                 item_current_idx = i;
@@ -242,7 +242,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Телефон
         {
@@ -253,7 +253,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Юридический адрес
         {
@@ -264,7 +264,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Фактический адрес
         {
@@ -275,7 +275,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Эл.почта
         {
@@ -286,7 +286,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Примечание
         {
@@ -297,7 +297,7 @@ clients_view_display(DB_ClientList *client_list)
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
           sprintf(title_buf, "##%s", uuid.value);
-          ImGui::InputText(title_buf, input_buf, ArrayCount(input_buf));
+          ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Контрагент
         {
@@ -320,7 +320,7 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::SameLine();
 
           if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-            for (size_t i = 0; i < ArrayCount(items); i++) {
+            for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
               const u32 is_selected = (item_current_idx == i);
               if (ImGui::Selectable(items[i], is_selected)) {
                 item_current_idx = i;
@@ -353,7 +353,7 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::SameLine();
 
           if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-            for (size_t i = 0; i < ArrayCount(items); i++) {
+            for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
               const u32 is_selected = (item_current_idx == i);
               if (ImGui::Selectable(items[i], is_selected)) {
                 item_current_idx = i;
@@ -387,7 +387,7 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::SameLine();
 
           if (ImGui::BeginCombo(title_buf, preview_value, flags)) {
-            for (size_t i = 0; i < ArrayCount(items); i++) {
+            for (size_t i = 0; i < ARRAY_COUNT(items); i++) {
               const u32 is_selected = (item_current_idx == i);
               if (ImGui::Selectable(items[i], is_selected)) {
                 item_current_idx = i;
@@ -440,7 +440,7 @@ clients_view_display(DB_ClientList *client_list)
     ImGui::TableHeadersRow();
 
     for (u32 row = 0;
-         row < ClampTop(strtol(preview_value, NULL, 10), max_client_view);
+         row < CLAMP_TOP(strtol(preview_value, NULL, 10), max_client_view);
          row++) {
       ImGui::TableNextRow();
 
