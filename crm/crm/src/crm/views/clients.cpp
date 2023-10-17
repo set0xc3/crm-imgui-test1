@@ -54,10 +54,10 @@ clients_view_display(DB_ClientList *client_list)
       static u32  item_current_idx = 0;
       const char *preview_value    = items[item_current_idx];
 
-      static Uuid uuid            = uuid_gen();
+      static uuid id              = uuid_gen();
       static char input_buf[1024] = { 0 };
       static char title_buf[1024] = { 0 };
-      sprintf(title_buf, "##%s", uuid.value);
+      sprintf(title_buf, "##%s", id.value);
 
       ImGui::Text("%s", preview_value);
       ImGui::SameLine();
@@ -82,10 +82,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Телефон:*");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Ф.И.О
@@ -93,10 +93,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Ф.И.О:*");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Адрес
@@ -104,10 +104,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Адрес:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Эл.почта
@@ -115,10 +115,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Эл.почта:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Примечание
@@ -126,10 +126,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Примечание:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Контрагент
@@ -144,10 +144,10 @@ clients_view_display(DB_ClientList *client_list)
           static u32  item_current_idx = 0;
           const char *preview_value    = items[item_current_idx];
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
 
           ImGui::Text("%s", preview_value);
           ImGui::SameLine();
@@ -177,10 +177,10 @@ clients_view_display(DB_ClientList *client_list)
           static u32  item_current_idx = 0;
           const char *preview_value    = items[item_current_idx];
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
 
           ImGui::Text("%s", preview_value);
           ImGui::SameLine();
@@ -211,10 +211,10 @@ clients_view_display(DB_ClientList *client_list)
           static u32  item_current_idx = 0;
           const char *preview_value    = items[item_current_idx];
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
 
           ImGui::Text("%s", preview_value);
           ImGui::SameLine();
@@ -238,10 +238,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Название организации:*");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Телефон
@@ -249,10 +249,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Телефон:*");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Юридический адрес
@@ -260,10 +260,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Юридический адрес:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Фактический адрес
@@ -271,10 +271,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Фактический адрес:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Эл.почта
@@ -282,10 +282,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Эл.почта:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Примечание
@@ -293,10 +293,10 @@ clients_view_display(DB_ClientList *client_list)
           ImGui::Text("Примечание:");
           ImGui::SameLine();
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
           ImGui::InputText(title_buf, input_buf, ARRAY_COUNT(input_buf));
         }
         // Контрагент
@@ -311,10 +311,10 @@ clients_view_display(DB_ClientList *client_list)
           static u32  item_current_idx = 0;
           const char *preview_value    = items[item_current_idx];
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
 
           ImGui::Text("%s", preview_value);
           ImGui::SameLine();
@@ -344,10 +344,10 @@ clients_view_display(DB_ClientList *client_list)
           static u32  item_current_idx = 0;
           const char *preview_value    = items[item_current_idx];
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
 
           ImGui::Text("%s", preview_value);
           ImGui::SameLine();
@@ -378,10 +378,10 @@ clients_view_display(DB_ClientList *client_list)
           static u32  item_current_idx = 0;
           const char *preview_value    = items[item_current_idx];
 
-          static Uuid uuid            = uuid_gen();
+          static uuid id              = uuid_gen();
           static char input_buf[1024] = { 0 };
           static char title_buf[1024] = { 0 };
-          sprintf(title_buf, "##%s", uuid.value);
+          sprintf(title_buf, "##%s", id.value);
 
           ImGui::Text("%s", preview_value);
           ImGui::SameLine();

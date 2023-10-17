@@ -1,7 +1,7 @@
 #include "crm/ui/imgui.h"
 
 #include <imgui.h>
-#include <imgui_impl_opengl2.h>
+#include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl2.h>
 
 void
@@ -30,7 +30,7 @@ imgui_init(void)
 
   ImGui_ImplSDL2_InitForOpenGL(os_window_root_get()->sdl.window,
                                os_window_root_get()->sdl.gl_ctx);
-  ImGui_ImplOpenGL2_Init();
+  ImGui_ImplOpenGL3_Init();
 
   ImGui::GetIO().FontGlobalScale = 1.0;
 }
@@ -38,7 +38,7 @@ imgui_init(void)
 void
 imgui_destroy(void)
 {
-  ImGui_ImplOpenGL2_Shutdown();
+  ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplSDL2_Shutdown();
   ImGui::DestroyContext();
 }
@@ -46,7 +46,7 @@ imgui_destroy(void)
 void
 imgui_render(void)
 {
-  ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
   ImGuiIO &io = ImGui::GetIO();
   (void)io;

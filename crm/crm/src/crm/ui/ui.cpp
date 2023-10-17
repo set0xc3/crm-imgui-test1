@@ -1,6 +1,8 @@
 #include "crm/ui/ui.h"
 #include "crm/ui/imgui.h"
 
+#include <glad/glad.h>
+
 void
 ui_init(void)
 {
@@ -33,13 +35,13 @@ ui_render(void)
 void
 ui_begin(void)
 {
-  ImGui_ImplOpenGL2_NewFrame();
   ImGui_ImplSDL2_NewFrame();
   ImGui::NewFrame();
 
   ImVec4   clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
   ImGuiIO &io          = ImGui::GetIO();
-  gfx_begin(0, 0, (u32)io.DisplaySize.x, (u32)io.DisplaySize.y);
+  gfx_viewport_set(
+      vec4_init(0, 0, (u32)io.DisplaySize.x, (u32)io.DisplaySize.y));
   glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
                clear_color.z * clear_color.w, clear_color.w);
   glClear(GL_COLOR_BUFFER_BIT);
