@@ -1,18 +1,30 @@
 #include "crm/ui/ui.h"
-#include "crm/ui/imgui.h"
-
-#include <glad/glad.h>
 
 void
 ui_init(void)
 {
-  imgui_init();
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  (void)io;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+  io.Fonts->AddFontFromFileTTF("assets/fonts/SourceCodePro-Medium.otf", 20.0f,
+                               nullptr,
+                               ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
+
+  // Setup Platform/Renderer backends
+  ImGui_ImplSDL2_InitForOpenGL(os_window_root_get()->sdl.window,
+                               os_window_root_get()->sdl.gl_ctx);
+  ImGui_ImplOpenGL3_Init();
 }
 
 void
 ui_destroy(void)
 {
-  imgui_destroy();
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplSDL2_Shutdown();
+  ImGui::DestroyContext();
 }
 
 void
@@ -22,33 +34,16 @@ ui_process_event(SDL_Event *event)
 }
 
 void
-ui_update(void)
-{
-}
-
-void
-ui_render(void)
-{
-  imgui_render();
-}
-
-void
 ui_begin(void)
 {
+  ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplSDL2_NewFrame();
   ImGui::NewFrame();
-
-  ImVec4   clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-  ImGuiIO &io          = ImGui::GetIO();
-  gfx_viewport_set(
-      vec4_init(0, 0, (u32)io.DisplaySize.x, (u32)io.DisplaySize.y));
-  glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
-               clear_color.z * clear_color.w, clear_color.w);
-  glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void
 ui_end(void)
 {
   ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

@@ -1,16 +1,16 @@
 #include "app.h"
 
-#include "crm/ui/imgui.h"
-#include "crm/ui/ui.h"
-#include "crm/views/clients.h"
-#include "db/client.h"
-#include "db/server.h"
-
-#include <imgui.h>
-#include <imgui_impl_opengl2.h>
-#include <imgui_impl_sdl2.h>
-
 static App_Ctx ctx;
+
+int
+main(void)
+{
+  chdir("../../..");
+  app_init();
+  app_run();
+  app_shutdown();
+  return 0;
+}
 
 void
 app_init(void)
@@ -23,38 +23,28 @@ app_init(void)
 void
 app_run(void)
 {
-  app_init();
-
-  // Main loop
-  b32 done = false;
-  while (!done) {
+  b32 is_quit = false;
+  while (!is_quit) {
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    while (os_event_next(&event)) {
+      if (!os_process_event(&event)) {
+        is_quit = true;
+      }
       ui_process_event(&event);
-      if (event.type == SDL_QUIT)
-        done = true;
-      if (event.type == SDL_WINDOWEVENT
-          && event.window.event == SDL_WINDOWEVENT_CLOSE
-          && event.window.windowID
-                 == SDL_GetWindowID(os_window_root_get()->sdl.window))
-        done = true;
     }
-
+    gfx_frame_begin();
     ui_begin();
     {
       static bool             use_work_area = true;
       static ImGuiWindowFlags flags         = ImGuiWindowFlags_NoDecoration
                                       | ImGuiWindowFlags_NoMove
                                       | ImGuiWindowFlags_NoSavedSettings;
-
       const ImGuiViewport *viewport = ImGui::GetMainViewport();
       ImGui::SetNextWindowPos(use_work_area ? viewport->WorkPos
                                             : viewport->Pos);
       ImGui::SetNextWindowSize(use_work_area ? viewport->WorkSize
                                              : viewport->Size);
-
       if (ImGui::Begin("RootWindow", NULL, flags)) {
-        // TabBars
         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
         if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)) {
           if (ImGui::BeginTabItem("Главная")) {
@@ -87,25 +77,21 @@ app_run(void)
           }
           ImGui::EndTabBar();
         }
-
         ImGui::ShowDemoWindow();
       }
       ImGui::End();
     }
-
     ui_end();
-    ui_render();
-
+    gfx_frame_end();
     os_window_swap_buffer(os_window_root_get());
-
     os_delay(1);
   }
-
-  app_shutdown();
 }
 
 void
 app_shutdown(void)
 {
-  imgui_destroy();
+  ui_destroy();
+  gfx_destroy();
+  os_destroy();
 }
