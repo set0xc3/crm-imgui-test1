@@ -1,5 +1,7 @@
 #include "app.h"
 
+#include <imgui_internal.h>
+
 static App_Ctx ctx;
 
 int
@@ -18,6 +20,7 @@ app_init(void)
   os_init(false);
   gfx_init();
   ui_init();
+  LOG_INFO("WindowDpiScale: %f\n", ImGui::GetWindowDpiScale());
 }
 
 void

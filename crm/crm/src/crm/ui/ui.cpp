@@ -6,12 +6,23 @@ ui_init(void)
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
+
   ImGuiIO &io = ImGui::GetIO();
   (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-  io.Fonts->AddFontFromFileTTF("assets/fonts/SourceCodePro-Medium.otf", 20.0f,
-                               nullptr,
-                               ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard
+                    | ImGuiConfigFlags_DpiEnableScaleViewports
+                    | ImGuiConfigFlags_DpiEnableScaleFonts;
+
+  f32 dpi_scale = 0.0f;
+  SDL_GetDisplayDPI(0, &dpi_scale, NULL, NULL);
+  dpi_scale = dpi_scale / 96.0f;
+
+  ImGuiStyle &style = ImGui::GetStyle();
+  style.ScaleAllSizes(dpi_scale);
+
+  ImFont *font = io.Fonts->AddFontFromFileTTF(
+      "assets/fonts/SourceCodePro-Regular.otf", 10.0f * dpi_scale, NULL,
+      io.Fonts->GetGlyphRangesCyrillic());
 
   // Setup Platform/Renderer backends
   ImGui_ImplSDL2_InitForOpenGL(os_window_root_get()->sdl.window,
