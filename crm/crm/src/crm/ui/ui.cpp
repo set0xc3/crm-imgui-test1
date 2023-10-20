@@ -1,4 +1,5 @@
 #include "crm/ui/ui.h"
+#include "crm/ui/clients.h"
 
 void
 ui_init(void)
@@ -57,4 +58,52 @@ ui_end(void)
 {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void
+ui_main(void)
+{
+  static bool             use_work_area = true;
+  static ImGuiWindowFlags flags         = ImGuiWindowFlags_NoDecoration
+                                  | ImGuiWindowFlags_NoMove
+                                  | ImGuiWindowFlags_NoSavedSettings;
+  const ImGuiViewport *viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(use_work_area ? viewport->WorkPos : viewport->Pos);
+  ImGui::SetNextWindowSize(use_work_area ? viewport->WorkSize
+                                         : viewport->Size);
+  if (ImGui::Begin("RootWindow", NULL, flags)) {
+    ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+    if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)) {
+      if (ImGui::BeginTabItem("Главная")) {
+        ImGui::Text("Главная");
+        ImGui::EndTabItem();
+      }
+      if (ImGui::BeginTabItem("Ремонты")) {
+        ImGui::Text("Ремонты");
+        ImGui::EndTabItem();
+      }
+      if (ImGui::BeginTabItem("Товары")) {
+        ImGui::Text("Товары");
+        ImGui::EndTabItem();
+      }
+      if (ImGui::BeginTabItem("Клиенты")) {
+        clients_view_display(NULL);
+      }
+      if (ImGui::BeginTabItem("Финансы")) {
+        ImGui::Text("Финансы");
+        ImGui::EndTabItem();
+      }
+      if (ImGui::BeginTabItem("Отчёты")) {
+        ImGui::Text("Отчёты");
+        ImGui::EndTabItem();
+      }
+      if (ImGui::BeginTabItem("Задания")) {
+        ImGui::Text("Задания");
+        ImGui::EndTabItem();
+      }
+      ImGui::EndTabBar();
+    }
+    ImGui::ShowDemoWindow();
+  }
+  ImGui::End();
 }
