@@ -1,8 +1,21 @@
 #include <cbased.h>
 #include <crm.h>
 
-int
-main(void)
+#include <imgui.h>
+#include <unity.h>
+
+void
+setUp(void)
+{
+}
+
+void
+tearDown(void)
+{
+}
+
+void
+test_imgui(void)
 {
   chdir("../../.."); // TODO: Remove this
   os_init(false);
@@ -17,7 +30,7 @@ main(void)
       }
       ui_process_event(&event);
     }
-    gfx_frame_begin();
+    gfx_begin();
     ui_begin();
     {
       static float f       = 0.0f;
@@ -35,11 +48,10 @@ main(void)
       ImGui::End();
     }
     ui_end();
-    gfx_frame_end();
+    gfx_end();
     os_window_swap_buffer(os_window_root_get());
   }
   ui_destroy();
   gfx_destroy();
   os_destroy();
-  return 0;
 }
