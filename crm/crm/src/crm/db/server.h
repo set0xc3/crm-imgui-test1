@@ -9,5 +9,5 @@ struct DB_Server {
   void *handle;
 };
 
-API b32  DB_server_connect(const char *path);
-API void DB_server_disconnect(void);
+api b32  DB_server_connect(const char *path);
+api void DB_server_disconnect(void);

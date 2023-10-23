@@ -1,7 +1,5 @@
 #include "app.h"
 
-#include "crm/ui/ui.h"
-
 int
 main(void)
 {
@@ -17,7 +15,6 @@ app_init(void)
 {
   os_init(false);
   gfx_init();
-  ui_init();
 }
 
 void
@@ -30,12 +27,8 @@ app_run(void)
       if (!os_process_event(&event)) {
         is_quit = true;
       }
-      ui_process_event(&event);
     }
     gfx_frame_begin();
-    ui_begin();
-    ui_main();
-    ui_end();
     gfx_frame_end();
     os_window_swap_buffer(os_window_root_get());
     os_delay(1);
@@ -45,7 +38,6 @@ app_run(void)
 void
 app_shutdown(void)
 {
-  ui_destroy();
   gfx_destroy();
   os_destroy();
 }

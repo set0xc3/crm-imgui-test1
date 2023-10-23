@@ -30,7 +30,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 include_directories(
   ../crm/src
   ${CMAKE_SOURCE_DIR}/vendor/cbased/cbased/src
-  ${CMAKE_SOURCE_DIR}/vendor/glad/include
+  ${CMAKE_SOURCE_DIR}/vendor/cbased/vendor/glad/include
   ${CMAKE_SOURCE_DIR}/vendor/imgui
   ${CMAKE_SOURCE_DIR}/vendor/imgui/backends
   ${SDL2_INCLUDE_DIRS}

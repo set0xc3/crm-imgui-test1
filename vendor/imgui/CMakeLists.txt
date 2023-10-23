@@ -1,14 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(TARGET imgui)
-project(${TARGET} LANGUAGES CXX)
+project(imgui LANGUAGES CXX)
 
 set(TARGET_ARCHITECTURE "x64")
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${TARGET}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${TARGET}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${TARGET}/bin)
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
@@ -39,14 +33,14 @@ add_compile_options(
   -Wno-incompatible-library-redeclaration
 )
 
-add_library(${TARGET} ${IMGUI_SRC_FILES})
+add_library(${PROJECT_NAME} ${IMGUI_SRC_FILES})
 
-target_include_directories(${TARGET} PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
   .
   ${SDL2_INCLUDE_DIRS}
 )
 
-target_link_libraries(${TARGET} PRIVATE 
+target_link_libraries(${PROJECT_NAME} PRIVATE 
   GL 
   ${SDL2_LIBRARIES}
 )
