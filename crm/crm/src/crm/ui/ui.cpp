@@ -1,4 +1,5 @@
 #include "crm/ui/ui.h"
+#include "SDL_video.h"
 #include "crm/ui/clients.h"
 
 #include <imgui.h>
@@ -6,6 +7,10 @@
 #include <imgui_impl_sdl2.h>
 
 #include <cbased.h>
+
+global f32 font_size         = 16.0f;
+global f32 display_dpi       = 0.0f;
+global f32 display_dpi_scale = 1.0f;
 
 void
 ui_init(void)
@@ -16,22 +21,21 @@ ui_init(void)
 
   ImGuiIO &io = ImGui::GetIO();
   (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard
-                    | ImGuiConfigFlags_DpiEnableScaleViewports
-                    | ImGuiConfigFlags_DpiEnableScaleFonts;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-  f32 dpi_scale = 0.0f;
-  SDL_GetDisplayDPI(0, &dpi_scale, NULL, NULL);
-  dpi_scale = dpi_scale / 96.0f;
+  // TODO:
+  {
+    SDL_GetDisplayDPI(0, NULL, NULL, &display_dpi);
+    display_dpi = (display_dpi / 96);
+  }
 
   ImGuiStyle &style = ImGui::GetStyle();
-  style.ScaleAllSizes(dpi_scale);
+  style.ScaleAllSizes(display_dpi);
 
   ImFont *font = io.Fonts->AddFontFromFileTTF(
-      "assets/fonts/SourceCodePro-Regular.otf", 10.0f * dpi_scale, NULL,
+      "assets/fonts/Inter-Regular.otf", font_size * display_dpi_scale, NULL,
       io.Fonts->GetGlyphRangesCyrillic());
 
-  // Setup Platform/Renderer backends
   ImGui_ImplSDL2_InitForOpenGL(os_window_root_get()->sdl.window,
                                os_window_root_get()->sdl.gl_ctx);
   ImGui_ImplOpenGL3_Init();
@@ -142,12 +146,10 @@ ui_main(void)
                                          : viewport->Size);
   ImGui::Begin("RootWindow", NULL, flags);
   {
-    ImGui::BeginChild("##left_panel",
-                      ImVec2(226, ImGui::GetIO().DisplaySize.y - 28), flags);
     {
       ImGui::BeginGroup();
       {
-        static ImVec2 button_size = ImVec2(200, 50);
+        static ImVec2 button_size = ImVec2(150, 50);
         static ImVec4 button_default_color
             = ImGui::GetStyleColorVec4(ImGuiCol_Button);
 
@@ -175,16 +177,17 @@ ui_main(void)
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
           }
 
-          if (ui_button(button.label, button_size, UI_TextFlags_PosLeft)) {
+          // if (ui_button(button.label, button_size, UI_TextFlags_PosLeft)) {
+          if (ImGui::Button(button.label)) {
             category_current_idx = button.category_idx;
           }
+          ImGui::SameLine();
 
           ImGui::PopStyleColor();
         }
       }
       ImGui::EndGroup();
     }
-    ImGui::EndChild();
 
     ImGui::ShowDemoWindow();
   }

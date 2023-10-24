@@ -15,7 +15,7 @@ else()
     include_directories(/usr/include/postgresql)
 endif()
 
-link_libraries(cbased imgui)
+link_libraries(X11 Xrandr cbased imgui)
 
 add_compile_options(
   -g 
