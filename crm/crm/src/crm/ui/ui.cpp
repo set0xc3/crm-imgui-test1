@@ -66,9 +66,72 @@ ui_end(void)
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+enum {
+  UI_TextFlags_PosLeft,
+  UI_TextFlags_PosCenter,
+  UI_TextFlags_PosRight,
+};
+
+enum UI_CategoryView {
+  UI_CategoryView_Main,
+  UI_CategoryView_Repairs,
+  UI_CategoryView_Clients,
+  UI_CategoryView_Products,
+  UI_CategoryView_Finance,
+  UI_CategoryView_Reports,
+  UI_CategoryView_Tasks,
+  UI_CategoryView_Settings,
+};
+
+b32
+ui_button(const char *label, const ImVec2 &size = ImVec2(0, 0),
+          const u32 text_flags = UI_TextFlags_PosCenter)
+{
+  b32    result          = false;
+  ImVec2 cursor_position = ImGui::GetCursorPos();
+  ImVec2 text_position;
+  f32    padding = 7.0f;
+
+  switch (text_flags) {
+  case UI_TextFlags_PosLeft:
+    text_position = {
+      cursor_position.x + padding,
+      cursor_position.y + (size.y - ImGui::GetTextLineHeightWithSpacing()) / 2,
+    };
+    break;
+  case UI_TextFlags_PosCenter:
+    text_position = {
+      cursor_position.x + (size.x - ImGui::CalcTextSize(label).x) / 2,
+      cursor_position.y + (size.y - ImGui::GetTextLineHeightWithSpacing()) / 2,
+    };
+    break;
+  case UI_TextFlags_PosRight:
+    text_position = {
+      cursor_position.x + (size.x - ImGui::CalcTextSize(label).x) - padding,
+      cursor_position.y + (size.y - ImGui::GetTextLineHeightWithSpacing()) / 2,
+    };
+    break;
+  }
+
+  static char title_buf[1024] = { 0 };
+  sprintf(title_buf, "##%s", label);
+
+  ImGui::SetCursorPos(cursor_position);
+  if (ImGui::Button(title_buf, size)) {
+    result = true;
+  }
+  ImGui::SetCursorPos(text_position);
+  ImGui::Text("%s", label);
+  ImGui::Spacing();
+  ImGui::Spacing();
+
+  return result;
+}
+
 void
 ui_main(void)
 {
+  static ImGuiStyle      &style         = ImGui::GetStyle();
   static bool             use_work_area = true;
   static ImGuiWindowFlags flags         = ImGuiWindowFlags_NoDecoration
                                   | ImGuiWindowFlags_NoMove
@@ -77,38 +140,52 @@ ui_main(void)
   ImGui::SetNextWindowPos(use_work_area ? viewport->WorkPos : viewport->Pos);
   ImGui::SetNextWindowSize(use_work_area ? viewport->WorkSize
                                          : viewport->Size);
-  if (ImGui::Begin("RootWindow", NULL, flags)) {
-    ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-    if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)) {
-      if (ImGui::BeginTabItem("Главная")) {
-        ImGui::Text("Главная");
-        ImGui::EndTabItem();
+  ImGui::Begin("RootWindow", NULL, flags);
+  {
+    ImGui::BeginChild("##left_panel",
+                      ImVec2(226, ImGui::GetIO().DisplaySize.y - 28), flags);
+    {
+      ImGui::BeginGroup();
+      {
+        static ImVec2 button_size = ImVec2(200, 50);
+        static ImVec4 button_default_color
+            = ImGui::GetStyleColorVec4(ImGuiCol_Button);
+
+        struct UI_ButtonInfo {
+          const char *label;
+          u32         category_idx;
+        };
+
+        static UI_ButtonInfo buttons[]
+            = { { "Главная", UI_CategoryView_Main },
+                { "Клиенты", UI_CategoryView_Clients },
+                { "Ремонты", UI_CategoryView_Repairs },
+                { "Товары", UI_CategoryView_Products },
+                { "Финансы", UI_CategoryView_Finance },
+                { "Отчёты", UI_CategoryView_Reports },
+                { "Задания", UI_CategoryView_Tasks },
+                { "Настройки", UI_CategoryView_Settings } };
+
+        static u32 category_current_idx = 0;
+
+        for (const auto &button : buttons) {
+          if (category_current_idx == button.category_idx) {
+            ImGui::PushStyleColor(ImGuiCol_Button, button_default_color);
+          } else {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+          }
+
+          if (ui_button(button.label, button_size, UI_TextFlags_PosLeft)) {
+            category_current_idx = button.category_idx;
+          }
+
+          ImGui::PopStyleColor();
+        }
       }
-      if (ImGui::BeginTabItem("Ремонты")) {
-        ImGui::Text("Ремонты");
-        ImGui::EndTabItem();
-      }
-      if (ImGui::BeginTabItem("Товары")) {
-        ImGui::Text("Товары");
-        ImGui::EndTabItem();
-      }
-      if (ImGui::BeginTabItem("Клиенты")) {
-        clients_view_display(NULL);
-      }
-      if (ImGui::BeginTabItem("Финансы")) {
-        ImGui::Text("Финансы");
-        ImGui::EndTabItem();
-      }
-      if (ImGui::BeginTabItem("Отчёты")) {
-        ImGui::Text("Отчёты");
-        ImGui::EndTabItem();
-      }
-      if (ImGui::BeginTabItem("Задания")) {
-        ImGui::Text("Задания");
-        ImGui::EndTabItem();
-      }
-      ImGui::EndTabBar();
+      ImGui::EndGroup();
     }
+    ImGui::EndChild();
+
     ImGui::ShowDemoWindow();
   }
   ImGui::End();
